@@ -1,4 +1,3 @@
-import { setSelectionRange } from "@testing-library/user-event/dist/utils"
 import React, { useState, useEffect } from "react"
 import {AiOutlineDelete,AiOutlineEdit} from "react-icons/ai"
 import { v4 as uuidv4} from "uuid"
