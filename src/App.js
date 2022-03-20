@@ -189,7 +189,7 @@ function App() {
 
 						<div className="flex flex-col">
 							
-							<input type="url" 
+							<input type="text" 
 								name="website" 
 								id="website" 
 								placeholder="Enter your website"
