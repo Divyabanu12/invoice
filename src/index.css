@@ -28,13 +28,26 @@ button:hover{
   color: #F45C20;
 }
 input, textarea{
-  background-color: #fdf4dbc2;
+  /* background-color: #fdf4dbc2; */
   padding: 0.5rem;
-  border-radius: 0.2rem;
-  margin-bottom: 2rem;
+  border-radius: 0.1rem;
+  
+  margin-bottom: 1rem;
   color: #616161;
-  border-color: black;
+  
+  
 }
+
+.error{
+  color: red;
+}
+.details input{
+  width: 30rem;
+  line-height: 0.1rem;
+}
+
+
+.invoice :focus { background-color: #fdf4dbc2; }
 
 button{
   user-select: none;

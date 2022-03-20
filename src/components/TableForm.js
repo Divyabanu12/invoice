@@ -6,38 +6,69 @@ export default function TableForm({description,setDescription,quantity,setQuanti
 
     const[isEditing, setIsEditing] =useState(false)
     // Submit form function
+
+    const initialValuesTable ={description,quantity,price}
+
+	const [formValuesTable,setFormValuesTable] =useState(initialValuesTable);
+	const [formErrorsTable,setFormErrorsTable] =useState({});
+
+	const[isSubmitTable,setIsSubmitTable] = useState(false)
+
+	const handleChange = (e) => {
+		const{name,value} = e.target;
+		setFormValuesTable({...formValuesTable,[name]: value});
+	}
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        if(!description || !quantity || !price){
-            alert("Enter all the item details")
-        }else{
-
-            const newItems={
-                id: uuidv4(),
-                description,
-                quantity,
-                price,
-                amount 
-             }
-             setDescription("")
-             setQuantity("")
-             setPrice("")
-             setAmount("")
-             setList([...list, newItems])
-             setIsEditing(false)
-        }
+        setFormErrorsTable(validateTable(formValuesTable) ) 
+		setIsSubmitTable(true)
+        
 
     }
 
+    useEffect(() => {
+		console.log(formErrorsTable)
+		if(Object.keys(formErrorsTable).length === 0 && isSubmitTable){
+			
+            const newItems={
+                id: (uuidv4()),
+                description:(formValuesTable.description),
+                quantity:(formValuesTable.quantity),
+                price:(formValuesTable.price),
+                amount 
+             }
+             setFormValuesTable({description:"",price:"",quantity:""});
+             setAmount("")
+             setList([...list, newItems])
+             setIsEditing(false)
+        
+			console.log(formValuesTable)
+		}
+	},[formErrorsTable])
+
+    const validateTable =(values) => {
+		const errorsTable = {};	 
+		console.log("hi");
+		if(!(values.description)){
+			errorsTable.description =" Description is required"
+		}
+		if((!(values.price)) || isNaN(values.price)  ){
+			errorsTable.price =" Price should be a number"
+		}
+        if((!(values.quantity)) || isNaN(values.quantity) ){
+			errorsTable.quantity =" Quantity should be a number"
+		}
+		
+		return errorsTable;
+	}
     //Calculate items amount function
     useEffect(() =>{
         const calculateAmount = (amount) => {
-            setAmount(quantity * price)
+            setAmount(formValuesTable.quantity * formValuesTable.price)
         }
 
         calculateAmount(amount)
-    }, [amount,price,quantity,setAmount])
+    }, [amount,formValuesTable.price,formValuesTable.quantity,setAmount])
 
     //Calculate total amount of items in table
 
@@ -57,11 +88,12 @@ export default function TableForm({description,setDescription,quantity,setQuanti
     //Edit Button function
     const editRow = (id) => {
         const editingRow = list.find((row) => row.id === id)
+        console.log(editingRow);
         setList(list.filter((row) => row.id !== id))
         setIsEditing(true)
-        setDescription(editingRow.description)
-        setQuantity(editingRow.quantity)
-        setPrice(editingRow.price)
+        const editValues = {description:(editingRow.description),quantity:(editingRow.quantity),price:(editingRow.price)}
+        setFormValuesTable(editValues)
+        console.log(formValuesTable);
     }
     //Delete Button function
     const deleteRow = (id) =>   setList(list.filter((row) => row.id !== id))
@@ -78,8 +110,10 @@ export default function TableForm({description,setDescription,quantity,setQuanti
                     name="description" 
                     id="description" 
                     placeholder="Item Description" 
-                    value={description} 
-                    onChange={(e) => setDescription(e.target.value)} />
+                    value={formValuesTable.description} 
+                    onChange={handleChange} />
+                    {(formErrorsTable.description !== "")? (<div className="error">{formErrorsTable.description}</div>) : ("")}
+
             </div>
 
            <div className="md:grid grid-cols-3 gap-10">
@@ -90,8 +124,10 @@ export default function TableForm({description,setDescription,quantity,setQuanti
                     name="quantity" 
                     id="quantity" 
                     placeholder="Quantity" 
-                    value={quantity} 
-                    onChange={(e) => setQuantity(e.target.value)} />
+                    value={formValuesTable.quantity} 
+                    onChange={handleChange} />
+                    {(formErrorsTable.quantity !== "")? (<div className="error">{formErrorsTable.quantity}</div>) : ("")}
+
             </div>
 
             <div className="flex flex-col">
@@ -101,8 +137,10 @@ export default function TableForm({description,setDescription,quantity,setQuanti
                     name="price" 
                     id="price" 
                     placeholder="Item Price" 
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)} />
+                    value={formValuesTable.price} 
+                    onChange={handleChange} />
+                    {(formErrorsTable.price !== "")? (<div className="error">{formErrorsTable.price}</div>) : ("")}
+
             </div>
 
             <div className="flex flex-col">
@@ -110,8 +148,8 @@ export default function TableForm({description,setDescription,quantity,setQuanti
                <p>{amount}</p>
             </div>
            </div>
-           <button type="submit" className="mb-5 bg-500 text-white font-bold py-2 px-8 rounded shadow border-2 border-500 hover:bg-transparent hover:text-500 transition-all duration-300">
-           {isEditing ? "Editing Row Item " : "Add Table Item"}    
+           <button onClick={handleSubmit} className="mb-5 bg-500 text-white font-bold py-2 px-8 rounded shadow border-2 border-500 hover:bg-transparent hover:text-500 transition-all duration-300">
+           {isEditing ? "Editing Row Item " : "Add Item"}    
            </button>
             </form>
 

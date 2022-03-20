@@ -7,9 +7,7 @@ export default function Footer({name, address,website,email,phone,bankAccount,ba
                 <li><span className="font-bold">Your Name: </span>{name}</li>
                 <li><span className="font-bold">Your Email: </span>{email}</li>
                 <li><span className="font-bold">Phone Number: </span>{phone}</li>
-                <li><span className="font-bold">Bank: </span>{bankName}</li>
-                <li><span className="font-bold">Account Holder Name: </span>{name}</li>
-                <li><span className="font-bold">Account Number: </span>{bankAccount}</li>
+               
                 <li><span className="font-bold">Website: </span><a href={website} target="_blank" rel="noopenner noreferrer">{website}</a></li>
             </ul>
         </footer>
